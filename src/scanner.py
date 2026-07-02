@@ -294,8 +294,22 @@ def create_report(results: list[dict], benchmark: dict) -> str:
 
     verified_count = len(results)
     final_candidates = [r for r in results if r["qualified"]]
-    watchlist = [r for r in results if not r["qualified"] and r["score"] >= 60]
-    rejected = [r for r in results if not r["qualified"] and r["score"] < 60]
+    watchlist = [
+    r for r in results
+    if not r["qualified"]
+    and r["technical_pass"]
+    and sum([
+        r["momentum_pass"],
+        r["volume_pass"],
+        r["relative_strength_pass"],
+        r["risk_reward_pass"],
+        r["not_overextended"],
+    ]) >= 2
+]
+    rejected = [
+    r for r in results
+    if not r["qualified"] and r not in watchlist
+]
 
     lines = []
 
