@@ -316,7 +316,7 @@ def yes_no(value: bool) -> str:
     return "Yes" if value else "No"
 
 
-def create_report(results: list[dict], benchmark: dict) -> str:
+def create_report(results: list[dict], benchmark: dict, universe_name: str, universe_source: str) -> str:
     now_ist = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
     report_date = datetime.now(IST).strftime("%Y-%m-%d")
 
@@ -345,7 +345,8 @@ def create_report(results: list[dict], benchmark: dict) -> str:
     lines.append("")
     lines.append(f"Report date: {report_date}")
     lines.append(f"Run time: {now_ist}")
-    lines.append("Universe intended: Beginner test universe")
+   lines.append(f"Universe intended: {universe_name}")
+lines.append(f"Universe source: {universe_source}")
     lines.append(f"Stocks verified: {verified_count}")
     lines.append(f"Market condition: {benchmark['market_condition']}")
     lines.append("Data confidence: Medium")
