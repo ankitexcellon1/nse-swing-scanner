@@ -9,7 +9,9 @@ import yfinance as yf
 
 IST = ZoneInfo("Asia/Kolkata")
 
-SYMBOLS = {
+NIFTY50_CSV_URL = "https://nsearchives.nseindia.com/content/indices/ind_nifty50list.csv"
+
+FALLBACK_SYMBOLS = {
     "RELIANCE.NS": "Reliance Industries",
     "TCS.NS": "Tata Consultancy Services",
     "INFY.NS": "Infosys",
@@ -24,7 +26,33 @@ SYMBOLS = {
 
 BENCHMARK_SYMBOL = "^NSEI"
 
+def get_nifty50_symbols() -> tuple[dict, str]:
+    """
+    Fetch Nifty 50 constituents from the official NSE/Nifty Indices CSV.
+    If the fetch fails, fall back to the beginner test universe.
+    """
+    try:
+        constituents = pd.read_csv(NIFTY50_CSV_URL)
 
+        if "Symbol" not in constituents.columns or "Company Name" not in constituents.columns:
+            return FALLBACK_SYMBOLS, "Fallback test universe; official CSV format not recognized"
+
+        symbols = {}
+
+        for _, row in constituents.iterrows():
+            nse_symbol = str(row["Symbol"]).strip()
+            company = str(row["Company Name"]).strip()
+
+            if nse_symbol:
+                symbols[f"{nse_symbol}.NS"] = company
+
+        if len(symbols) < 45:
+            return FALLBACK_SYMBOLS, "Fallback test universe; official CSV returned too few symbols"
+
+        return symbols, "Official NSE/Nifty Indices Nifty 50 CSV"
+
+    except Exception as exc:
+        return FALLBACK_SYMBOLS, f"Fallback test universe; official Nifty 50 CSV fetch failed: {exc}"
 def download_price_data(symbol: str, period: str = "1y") -> pd.DataFrame:
     data = yf.download(
         symbol,
