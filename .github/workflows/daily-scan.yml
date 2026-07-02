@@ -1,1 +1,37 @@
 
+name: Daily NSE Swing Scan
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "02 13 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  run-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scanner
+        run: python src/scanner.py
+
+      - name: Commit generated report
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add reports/
+          git commit -m "Add daily NSE swing report" || echo "No report changes to commit"
+          git push
