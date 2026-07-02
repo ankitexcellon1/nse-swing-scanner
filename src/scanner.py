@@ -341,12 +341,12 @@ def create_report(results: list[dict], benchmark: dict, universe_name: str, univ
 
     lines = []
 
-    lines.append("# NSE Swing Scanner Report")
+       lines.append("# NSE Swing Scanner Report")
     lines.append("")
     lines.append(f"Report date: {report_date}")
     lines.append(f"Run time: {now_ist}")
-   lines.append(f"Universe intended: {universe_name}")
-lines.append(f"Universe source: {universe_source}")
+    lines.append(f"Universe intended: {universe_name}")
+    lines.append(f"Universe source: {universe_source}")
     lines.append(f"Stocks verified: {verified_count}")
     lines.append(f"Market condition: {benchmark['market_condition']}")
     lines.append("Data confidence: Medium")
