@@ -488,17 +488,20 @@ def main() -> None:
     benchmark = get_benchmark_context()
     nifty_return = benchmark["return_percent"] if benchmark["available"] else 0.0
 
-    results = []
+  symbols, universe_source = get_nifty50_symbols()
+universe_name = "Nifty 50"
 
-    for symbol, company in SYMBOLS.items():
-        try:
-            result = analyze_symbol(symbol, company, nifty_return)
-            if result:
-                results.append(result)
-        except Exception as exc:
-            print(f"Failed for {symbol}: {exc}")
+results = []
 
-    report = create_report(results, benchmark)
+for symbol, company in symbols.items():
+    try:
+        result = analyze_symbol(symbol, company, nifty_return)
+        if result:
+            results.append(result)
+    except Exception as exc:
+        print(f"Failed for {symbol}: {exc}")
+
+report = create_report(results, benchmark, universe_name, universe_source)
 
     reports_dir = Path("reports")
     reports_dir.mkdir(exist_ok=True)
