@@ -315,33 +315,34 @@ def analyze_symbol(symbol: str, company: str, nifty_return: float) -> dict | Non
 def yes_no(value: bool) -> str:
     return "Yes" if value else "No"
 
-
 def create_report(results: list[dict], benchmark: dict, universe_name: str, universe_source: str) -> str:
     now_ist = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
     report_date = datetime.now(IST).strftime("%Y-%m-%d")
 
     verified_count = len(results)
     final_candidates = [r for r in results if r["qualified"]]
+
     watchlist = [
-    r for r in results
-    if not r["qualified"]
-    and r["technical_pass"]
-    and sum([
-        r["momentum_pass"],
-        r["volume_pass"],
-        r["relative_strength_pass"],
-        r["risk_reward_pass"],
-        r["not_overextended"],
-    ]) >= 2
-]
+        r for r in results
+        if not r["qualified"]
+        and r["technical_pass"]
+        and sum([
+            r["momentum_pass"],
+            r["volume_pass"],
+            r["relative_strength_pass"],
+            r["risk_reward_pass"],
+            r["not_overextended"],
+        ]) >= 2
+    ]
+
     rejected = [
-    r for r in results
-    if not r["qualified"] and r not in watchlist
-]
+        r for r in results
+        if not r["qualified"] and r not in watchlist
+    ]
 
     lines = []
 
-       lines.append("# NSE Swing Scanner Report")
+    lines.append("# NSE Swing Scanner Report")
     lines.append("")
     lines.append(f"Report date: {report_date}")
     lines.append(f"Run time: {now_ist}")
