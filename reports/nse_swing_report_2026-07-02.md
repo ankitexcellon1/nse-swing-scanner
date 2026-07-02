@@ -1,7 +1,7 @@
 # NSE Swing Scanner Report
 
 Report date: 2026-07-02
-Run time: 2026-07-02 18:59 IST
+Run time: 2026-07-02 19:06 IST
 Universe intended: Beginner test universe
 Stocks verified: 10
 Market condition: Bullish to selective swing environment
@@ -34,12 +34,104 @@ The system did not force recommendations. Watchlist names are not buy calls.
 No clean qualified swing-trading candidate found today under the defined rules.
 
 ## Watchlist / Manual Review Only
-No watchlist candidates.
+
+### ICICI Bank (ICICIBANK.NS)
+- Score: 50/100
+- Close: 1400.0
+- Setup type: Trend watchlist / below resistance
+- RSI14: 71.36
+- Volume vs AvgVol20: 15778794 vs 14647085
+- Relative strength vs Nifty: 0.75%
+- Nearest support: 1232.2
+- Nearest resistance: 1404.0
+- Stop-loss: 1365.65
+- Target 1: 1404.0
+- Risk-reward: 0.12
+
+Pass/Fail:
+- Technical pass: Yes
+- Momentum pass: No
+- Volume pass: No
+- Relative strength pass: Yes
+- Not overextended: Yes
+- Risk-reward pass: No
+
+Why not a final candidate:
+- Momentum failed: RSI is outside preferred 55-70 range.
+- Volume failed: volume is not above 1.5x 20-day average volume.
+- Risk-reward failed: setup does not offer minimum 1:2 risk-reward.
+
+IQ200 Red-Team Review:
+- Main objection: volume confirmation is weak, so breakout/follow-through may fail.
+- Momentum caution: RSI is above the preferred range, so chasing may be risky.
+- Trade-plan concern: target versus stop-loss does not justify the risk.
+- Avoid entry if the stock opens with a large gap-up, fails near resistance, or market direction turns weak.
+
+### State Bank of India (SBIN.NS)
+- Score: 50/100
+- Close: 1051.6
+- Setup type: Trend watchlist / below resistance
+- RSI14: 63.16
+- Volume vs AvgVol20: 14680502 vs 12188424
+- Relative strength vs Nifty: -0.31%
+- Nearest support: 961.1
+- Nearest resistance: 1055.4
+- Stop-loss: 1026.28
+- Target 1: 1055.4
+- Risk-reward: 0.15
+
+Pass/Fail:
+- Technical pass: Yes
+- Momentum pass: Yes
+- Volume pass: No
+- Relative strength pass: No
+- Not overextended: Yes
+- Risk-reward pass: No
+
+Why not a final candidate:
+- Volume failed: volume is not above 1.5x 20-day average volume.
+- Relative strength failed: stock did not outperform Nifty.
+- Risk-reward failed: setup does not offer minimum 1:2 risk-reward.
+
+IQ200 Red-Team Review:
+- Main objection: volume confirmation is weak, so breakout/follow-through may fail.
+- Relative strength concern: the stock is not clearly outperforming Nifty.
+- Trade-plan concern: target versus stop-loss does not justify the risk.
+- Avoid entry if the stock opens with a large gap-up, fails near resistance, or market direction turns weak.
+
+### Bharti Airtel (BHARTIARTL.NS)
+- Score: 40/100
+- Close: 1875.0
+- Setup type: Trend watchlist / below resistance
+- RSI14: 62.79
+- Volume vs AvgVol20: 5282234 vs 6642801
+- Relative strength vs Nifty: -0.5%
+- Nearest support: 1768.6
+- Nearest resistance: 1927.7
+- Stop-loss: 1830.1
+- Target 1: 1927.7
+- Risk-reward: 1.17
+
+Pass/Fail:
+- Technical pass: Yes
+- Momentum pass: Yes
+- Volume pass: No
+- Relative strength pass: No
+- Not overextended: Yes
+- Risk-reward pass: No
+
+Why not a final candidate:
+- Volume failed: volume is not above 1.5x 20-day average volume.
+- Relative strength failed: stock did not outperform Nifty.
+- Risk-reward failed: setup does not offer minimum 1:2 risk-reward.
+
+IQ200 Red-Team Review:
+- Main objection: volume confirmation is weak, so breakout/follow-through may fail.
+- Relative strength concern: the stock is not clearly outperforming Nifty.
+- Trade-plan concern: target versus stop-loss does not justify the risk.
+- Avoid entry if the stock opens with a large gap-up, fails near resistance, or market direction turns weak.
 
 ## Rejected Stocks
-- ICICI Bank (ICICIBANK.NS): Score 50/100. Momentum failed: RSI is outside preferred 55-70 range.; Volume failed: volume is not above 1.5x 20-day average volume.; Risk-reward failed: setup does not offer minimum 1:2 risk-reward.
-- State Bank of India (SBIN.NS): Score 50/100. Volume failed: volume is not above 1.5x 20-day average volume.; Relative strength failed: stock did not outperform Nifty.; Risk-reward failed: setup does not offer minimum 1:2 risk-reward.
-- Bharti Airtel (BHARTIARTL.NS): Score 40/100. Volume failed: volume is not above 1.5x 20-day average volume.; Relative strength failed: stock did not outperform Nifty.; Risk-reward failed: setup does not offer minimum 1:2 risk-reward.
 - Axis Bank (AXISBANK.NS): Score 35/100. Momentum failed: RSI is outside preferred 55-70 range.; Volume failed: volume is not above 1.5x 20-day average volume.; Relative strength failed: stock did not outperform Nifty.; Risk-reward failed: setup does not offer minimum 1:2 risk-reward.
 - Tata Consultancy Services (TCS.NS): Score 30/100. Technical trend failed: price/EMA structure is not clean.; Momentum failed: RSI is outside preferred 55-70 range.; Volume failed: volume is not above 1.5x 20-day average volume.
 - Infosys (INFY.NS): Score 30/100. Technical trend failed: price/EMA structure is not clean.; Momentum failed: RSI is outside preferred 55-70 range.; Volume failed: volume is not above 1.5x 20-day average volume.
