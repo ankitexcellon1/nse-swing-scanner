@@ -10,6 +10,7 @@ import yfinance as yf
 IST = ZoneInfo("Asia/Kolkata")
 
 NIFTY50_CSV_URL = "https://nsearchives.nseindia.com/content/indices/ind_nifty50list.csv"
+BENCHMARK_SYMBOL = "^NSEI"
 
 FALLBACK_SYMBOLS = {
     "RELIANCE.NS": "Reliance Industries",
@@ -24,11 +25,10 @@ FALLBACK_SYMBOLS = {
     "AXISBANK.NS": "Axis Bank",
 }
 
-BENCHMARK_SYMBOL = "^NSEI"
 
-def get_nifty50_symbols() -> tuple[dict, str]:
+def get_nifty50_symbols() -> tuple[dict[str, str], str]:
     """
-    Fetch Nifty 50 constituents from the official NSE/Nifty Indices CSV.
+    Fetch Nifty 50 constituents from the NSE/Nifty Indices CSV.
     If the fetch fails, fall back to the beginner test universe.
     """
     try:
@@ -53,6 +53,8 @@ def get_nifty50_symbols() -> tuple[dict, str]:
 
     except Exception as exc:
         return FALLBACK_SYMBOLS, f"Fallback test universe; official Nifty 50 CSV fetch failed: {exc}"
+
+
 def download_price_data(symbol: str, period: str = "1y") -> pd.DataFrame:
     data = yf.download(
         symbol,
@@ -119,6 +121,15 @@ def get_benchmark_context() -> dict:
         }
 
     data = add_indicators(data)
+
+    if data.empty or len(data) < 2:
+        return {
+            "available": False,
+            "return_percent": 0.0,
+            "market_condition": "Benchmark data unavailable",
+            "notes": "Nifty benchmark indicator data could not be verified.",
+        }
+
     latest = data.iloc[-1]
     previous = data.iloc[-2]
 
@@ -211,7 +222,7 @@ def analyze_symbol(symbol: str, company: str, nifty_return: float) -> dict | Non
 
     data = add_indicators(data)
 
-    if len(data) < 30:
+    if data.empty or len(data) < 30:
         return None
 
     latest = data.iloc[-1]
@@ -267,7 +278,6 @@ def analyze_symbol(symbol: str, company: str, nifty_return: float) -> dict | Non
     }
 
     rejection_reasons = get_rejection_reasons(flags)
-
     qualified = all(flags.values())
 
     score = 0
@@ -314,6 +324,7 @@ def analyze_symbol(symbol: str, company: str, nifty_return: float) -> dict | Non
 
 def yes_no(value: bool) -> str:
     return "Yes" if value else "No"
+
 
 def create_report(results: list[dict], benchmark: dict, universe_name: str, universe_source: str) -> str:
     now_ist = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
@@ -378,14 +389,16 @@ def create_report(results: list[dict], benchmark: dict, universe_name: str, univ
 
     lines.append("## Executive Summary")
     if final_candidates:
-        lines.append(f"{len(final_candidates)} stock(s) passed all MVP technical filters. These are research candidates only and still require manual chart, delivery, news, and event-risk confirmation.")
+        lines.append(
+            f"{len(final_candidates)} stock(s) passed all MVP technical filters. "
+            "These are research candidates only and still require manual chart, delivery, news, and event-risk confirmation."
+        )
     else:
         lines.append("No clean qualified swing-trading candidate found today under the defined MVP rules.")
         lines.append("The system did not force recommendations. Watchlist names are not buy calls.")
     lines.append("")
 
     lines.append("## Final Qualified Candidates")
-
     if not final_candidates:
         lines.append("")
         lines.append("No clean qualified swing-trading candidate found today under the defined rules.")
@@ -413,7 +426,6 @@ def create_report(results: list[dict], benchmark: dict, universe_name: str, univ
 
     lines.append("")
     lines.append("## Watchlist / Manual Review Only")
-
     if not watchlist:
         lines.append("No watchlist candidates.")
     else:
@@ -450,9 +462,8 @@ def create_report(results: list[dict], benchmark: dict, universe_name: str, univ
 
     lines.append("")
     lines.append("## Rejected Stocks")
-
     if not rejected:
-        lines.append("No low-score rejected stocks in this MVP universe.")
+        lines.append("No rejected stocks in this MVP universe.")
     else:
         for r in sorted(rejected, key=lambda x: x["score"], reverse=True):
             reason_text = "; ".join(r["rejection_reasons"]) if r["rejection_reasons"] else "Failed combined MVP filters."
@@ -480,7 +491,10 @@ def create_report(results: list[dict], benchmark: dict, universe_name: str, univ
     lines.append("- Support/resistance is approximated using the previous 20 trading days.")
     lines.append("- Use this report for research only.")
     lines.append("")
-    lines.append("This is a swing-trading research shortlist, not a guaranteed buy/sell recommendation. Use manual confirmation, position sizing, and stop-loss discipline before taking any trade.")
+    lines.append(
+        "This is a swing-trading research shortlist, not a guaranteed buy/sell recommendation. "
+        "Use manual confirmation, position sizing, and stop-loss discipline before taking any trade."
+    )
 
     return "\n".join(lines)
 
@@ -489,20 +503,20 @@ def main() -> None:
     benchmark = get_benchmark_context()
     nifty_return = benchmark["return_percent"] if benchmark["available"] else 0.0
 
-  symbols, universe_source = get_nifty50_symbols()
-universe_name = "Nifty 50"
+    symbols, universe_source = get_nifty50_symbols()
+    universe_name = "Nifty 50"
 
-results = []
+    results = []
 
-for symbol, company in symbols.items():
-    try:
-        result = analyze_symbol(symbol, company, nifty_return)
-        if result:
-            results.append(result)
-    except Exception as exc:
-        print(f"Failed for {symbol}: {exc}")
+    for symbol, company in symbols.items():
+        try:
+            result = analyze_symbol(symbol, company, nifty_return)
+            if result:
+                results.append(result)
+        except Exception as exc:
+            print(f"Failed for {symbol}: {exc}")
 
-report = create_report(results, benchmark, universe_name, universe_source)
+    report = create_report(results, benchmark, universe_name, universe_source)
 
     reports_dir = Path("reports")
     reports_dir.mkdir(exist_ok=True)
